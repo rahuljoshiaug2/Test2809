@@ -4,7 +4,7 @@ trigger:
 pool: rahul_test_agent_pool
 
 stages:
-  - stage: plan
+  - stage: Init
     jobs:
       - job: 
         displayName: JOb1
@@ -20,10 +20,20 @@ stages:
             backendAzureRmStorageAccountName: 'stgactrahul01'
             backendAzureRmContainerName: 'rahultestcontainer'
             backendAzureRmKey: 'rahul.tfstate'
+  - stage: plan
+    dependsOn: Init
+    jobs:    
       - job:
-        dependsOn: JOb1
         displayName: JOb2
         steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'Rahul_service_connection'
+            backendAzureRmStorageAccountName: 'stgactrahul01'
+            backendAzureRmContainerName: 'rahultestcontainer'
+            backendAzureRmKey: 'rahul.tfstate'
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
