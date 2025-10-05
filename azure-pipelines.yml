@@ -5,8 +5,45 @@ pool:
 rahul_test_agent_pool
 
 stages:
-  - stage: build
+  - stage: inititize
     jobs:
       - job: code
         steps:
-          - 
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'Rahul_service_connection'
+              backendAzureRmStorageAccountName: 'stgactrahul01'
+              backendAzureRmContainerName: 'rahultestcontainer'
+              backendAzureRmKey: 'rahul.tfstate'
+  - stage: plan
+    jobs:
+      -  job: plan
+         steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'Rahul_service_connection'
+              backendServiceArm: 'Rahul_service_connection'
+              backendAzureRmStorageAccountName: 'stgactrahul01'
+              backendAzureRmContainerName: 'rahultestcontainer'
+              backendAzureRmKey: 'rahul.tfstate'
+  - stage: apply
+    jobs:
+      - job: apply
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'Rahul_service_connection'
+              backendServiceArm: 'Rahul_service_connection'
+              backendAzureRmStorageAccountName: 'stgactrahul01'
+              backendAzureRmContainerName: 'rahultestcontainer'
+              backendAzureRmKey: 'rahul.tfstate'
+            
