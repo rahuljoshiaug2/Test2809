@@ -1,0 +1,12 @@
+trigger:
+- main
+
+pool:
+rahul_test_agent_pool
+
+stages:
+  - stage: build
+    jobs:
+      - job: code
+        steps:
+          - 
