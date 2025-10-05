@@ -16,6 +16,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/parent'
             backendServiceArm: 'Rahul_service_connection'
             backendAzureRmStorageAccountName: 'stgactrahul01'
             backendAzureRmContainerName: 'rahultestcontainer'
@@ -30,6 +31,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/parent'
             backendServiceArm: 'Rahul_service_connection'
             backendAzureRmStorageAccountName: 'stgactrahul01'
             backendAzureRmContainerName: 'rahultestcontainer'
@@ -38,8 +40,32 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/parent'
             environmentServiceNameAzureRM: 'Rahul_service_connection'
             backendServiceArm: 'Rahul_service_connection'
             backendAzureRmStorageAccountName: 'stgactrahul01'
             backendAzureRmContainerName: 'rahultestcontainer'
             backendAzureRmKey: 'rahul.tfstate'
+  - stage: apply
+    dependsOn: plan
+    jobs:
+      - job: 
+        displayName: Job3
+        steps:
+        
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/parent'
+            backendServiceArm: 'Rahul_service_connection'
+            backendAzureRmStorageAccountName: 'stgactrahul01'
+            backendAzureRmContainerName: 'rahultestcontainer'
+            backendAzureRmKey: 'rahul.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/parent'
+            commandOptions: '-auto-approve'
+            environmentServiceNameAzureRM: 'Rahul_service_connection'
