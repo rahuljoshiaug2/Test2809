@@ -20,7 +20,8 @@ stages:
             backendAzureRmStorageAccountName: 'stgactrahul01'
             backendAzureRmContainerName: 'rahultestcontainer'
             backendAzureRmKey: 'rahul.tfstate'
-      - job: 
+      - job:
+        dependsOn: JOb1
         displayName: JOb2
         steps:
         - task: TerraformTask@5
